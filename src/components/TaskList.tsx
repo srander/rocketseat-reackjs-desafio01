@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import '../styles/tasklist.scss'
 
@@ -16,14 +16,30 @@ export function TaskList() {
 
   function handleCreateNewTask() {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+    if (newTaskTitle !== undefined && newTaskTitle !== ''){
+      setTasks([...tasks, {id: Math.floor((Math.random() * 1000) + 1), title: newTaskTitle, isComplete: false} ])
+      setNewTaskTitle('');
+    }
   }
 
   function handleToggleTaskCompletion(id: number) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+    let listaTask: Task[] = [...tasks];
+    let index = listaTask.findIndex((item) => { return item.id === id; })
+
+    listaTask[index].isComplete = !listaTask[index].isComplete;
+    setTasks(listaTask);
   }
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
+    let listaTask: Task[] = [...tasks];
+    let index = listaTask.findIndex((item) => { return item.id === id; })
+
+    listaTask.splice(index, 1); // aqui é removido a grade da lista de grades
+    setTasks(listaTask);
+
+    console.log(id + ':' + index);
   }
 
   return (
